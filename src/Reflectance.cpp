@@ -75,7 +75,6 @@ Reflectance::Run()
 		pixel_t * dataset = mIoAgent->GetDataset(count);
 
 		omp_set_num_threads(mConfig.NumProcs);
-		//StartTimer();
 		#pragma omp parallel shared(count, dataset)
 		{
 			#pragma omp parallel for schedule(static)
@@ -85,8 +84,7 @@ Reflectance::Run()
 			}
 
 		}
-		//StopTimer();
-		//WriteMetrics();
+
 	}
 	catch(exception &e)
 	{

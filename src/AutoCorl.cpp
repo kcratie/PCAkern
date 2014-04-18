@@ -4,7 +4,7 @@
  *  Created on: Apr 11, 2014
  *      Author: kcratie
  */
-
+#include <omp.h>
 #include "AutoCorl.h"
 
 namespace PCAkern {
@@ -22,6 +22,31 @@ AutoCorrelation::ApplyTransform(
 	size_t Count)
 {
 	int status = 0;
+	size_t N = 1<<mConfig.DimPow;
+	pixel_t x, y, temp=0;
+
+
+	x=N;
+	omp_set_num_threads(mConfig.NumProcs);
+	#pragma omp parallel for schedule(static)
+	for(size_t k=0;k<N;k++)
+	{
+		y=N;
+		for(size_t l=0;l<N;l++)
+		{
+			temp=0;
+			for(size_t i=0;i<N-k;i++)
+			{
+				for(size_t j=0;j<N-l;j++)
+				{
+					temp= temp + Buf[(i*N)+j]*Buf[((i+k)*N)+((j+l)*N)];
+				}
+			}
+			mOutAr[(k*N)+l]= temp/(x*y);
+			y--;
+		}
+		x--;
+	}
 	return status;
 }
 
@@ -29,6 +54,29 @@ int
 AutoCorrelation::Run()
 {
 	int status = 0;
+	try
+	{
+		size_t count = 0;
+
+		pixel_t * dataset = mIoAgent->GetDataset(count);
+
+		//create output buffer since cannot be done in place
+		if(mOutAr) delete mOutAr;
+		mOutAr = new pixel_t[count];
+
+		for(size_t i = 0; i<mConfig.NumItrs; i++)
+			ApplyTransform(dataset, count);
+
+	}
+	catch(exception &e)
+	{
+		status = -1;
+	}
+
+
+
+
+
 	return status;
 }
 
