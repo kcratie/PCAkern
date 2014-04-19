@@ -61,6 +61,8 @@ Configuration::LoadConfig(const string & Filename)
 					 NumItrs = atoi(val.c_str());
 				 else if (key.compare("BenchmarkID")==0)
 					 BenchmarkID.assign(val);
+				 else if (key.compare("BaseOutputfile")==0)
+					 OutputFilename.assign(val);
 			}
 		}
 		config.close();
@@ -71,7 +73,6 @@ Configuration::LoadConfig(const string & Filename)
 		emsg.append(Filename);
 		throw logic_error(emsg);
 	}
-	OutputFilename.append("/home/kcratie/Workspace/PCA-kernels/pcaBench");
 	return;
 }
 

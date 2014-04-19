@@ -20,6 +20,8 @@ namespace PCAkern {
 class IIOAgent
 {
 public:
+	IIOAgent(){}
+	virtual ~IIOAgent(){}
 	virtual void InitDataset(size_t DimPower)=0;
 	virtual pixel_t * GetDataset(size_t & Count)=0;
 };
