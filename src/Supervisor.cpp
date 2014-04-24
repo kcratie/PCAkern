@@ -10,6 +10,7 @@
 #include <omp.h>
 #include "PerfMon.h"
 #include "Supervisor.h"
+#include <math.h>
 
 using namespace std;
 
@@ -29,13 +30,14 @@ Supervisor::RunRefl()
 	{
 		string outfile = mConfig.OutputFilename;
 		outfile.append("Refl");
-
+		size_t stage=0,
+				numstages=(mConfig.MaxNumProcs-mConfig.MinNumProcs+1)*(mConfig.MaxDimPow-mConfig.MinDimPow+1);
 		auto_ptr<IIOAgent> ioa (CreateIOAgent());
 		auto_ptr<Reflectance> refl (CreateReflectance(ioa.get()));
 		auto_ptr<PerfMon> pm (CreatePerfMon());
 		pm->AddHeader("Reflectance", mConfig.NumItrs);
 
-		for(size_t dpow=mConfig.MinDimPow; dpow<mConfig.MaxDimPow; dpow++)
+		for(size_t dpow=mConfig.MinDimPow; dpow<=mConfig.MaxDimPow; dpow++)
 		{
 			ioa->InitDataset(dpow);
 
@@ -53,6 +55,8 @@ Supervisor::RunRefl()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
+				double sz=pow(1<<dpow, 2);
+				cout<<"completed stage " <<stage++ <<" of "<<numstages <<", " <<sz <<" elements in :" << pm->GetDuration()<< " secs\n";
 			}
 		}
 		pm->Commit(outfile);

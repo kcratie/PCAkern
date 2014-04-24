@@ -26,7 +26,7 @@ struct PMonHeader {
 
 struct PMonEntry {
 	PMonEntry(){};
-	~PMonEntry(){*(char*)0;}//test
+	~PMonEntry(){}
 	size_t Dimensions;
 	size_t NumProcs;
 	double Duration;

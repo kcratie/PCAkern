@@ -23,7 +23,13 @@ PerfMon::PerfMon():
 {}
 
 PerfMon::~PerfMon()
-{}
+{
+	vector <PMonEntry*>::iterator vitr = mPerfEntries.begin();
+	for(; vitr!=mPerfEntries.end(); vitr++)
+	{
+		delete *vitr;
+	}
+}
 
 string
 PerfMon::Timestamp(void)
