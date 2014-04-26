@@ -36,11 +36,11 @@ private:
 	pixel_t * mOutput;
 
 	int ApplyTransform(
-		pixel_t buf[],
-		size_t count
+		pixel_t const buf[],
+		size_t const Count
 		);
 	inline void mask_operation(
-		pixel_t * A,
+		pixel_t const * A,
 		size_t i,
 		size_t j);
 

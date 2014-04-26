@@ -18,23 +18,21 @@ AutoCorrelation::~AutoCorrelation()
 
 int
 AutoCorrelation::ApplyTransform(
-	pixel_t Buf[],
-	size_t Count)
+	pixel_t const Buf[],
+	size_t const Count)
 {
 	int status = 0;
 	size_t N = 1<<mConfig.DimPow;
-	pixel_t x, y, temp=0;
+	pixel_t x=N;
 
-
-	x=N;
 	omp_set_num_threads(mConfig.NumProcs);
-	#pragma omp parallel for schedule(static)
+	#pragma omp parallel for schedule(static) firstprivate(x)
 	for(size_t k=0;k<N;k++)
 	{
-		y=N;
+		pixel_t y=N;
 		for(size_t l=0;l<N;l++)
 		{
-			temp=0;
+			pixel_t temp=0;
 			for(size_t i=0;i<N-k;i++)
 			{
 				for(size_t j=0;j<N-l;j++)

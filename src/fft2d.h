@@ -24,19 +24,26 @@ public:
 
 	int	Run();
 
+	void BuildPlan();
+
 	void SetCurrentConfig(
 			CurrentConfig & Config
 			);
 private:
 	IIOAgent * mIoAgent;
 	CurrentConfig mConfig;
-
+	pixel_t * mDataset;
 	fftw_complex *mResultSet;
+	fftw_plan plan_forward;
+	bool isaPlan;
+
+/*
 
 	int ApplyTransform(
 		pixel_t Buf[],
-		size_t count
+		size_t Count
 		);
+*/
 
 };
 

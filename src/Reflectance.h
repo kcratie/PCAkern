@@ -33,7 +33,7 @@ private:
 	static const pixel_t La;
 
 	IIOAgent * mIoAgent;
-	pixel_t * mOutBuf;
+	//pixel_t * mOutBuf;
 
 	/*+
 	Reflectance is implemented to be exception safe. It does not validate input as
@@ -54,8 +54,8 @@ private:
 	}
 
 	int ApplyTransform(
-		pixel_t buf[],
-		size_t count
+		pixel_t Buf[],
+		size_t Count
 		);
 
 };

@@ -10,6 +10,7 @@
 #include <map>
 #include <memory>
 #include <sstream>
+#include <omp.h>
 #include "PerfMon.h"
 
 using namespace std;
@@ -53,15 +54,15 @@ PerfMon::Timestamp(void)
 void
 PerfMon::StartTimer()
 {
-	//mTimerStart = omp_get_wtime();
-	mTimerStart = timerval();
+	mTimerStart = omp_get_wtime();
+	//mTimerStart = timerval();
 }
 
 void
 PerfMon::StopTimer()
 {
-	//mTimerEnd = omp_get_wtime();
-	mTimerEnd = timerval();
+	mTimerEnd = omp_get_wtime();
+	//mTimerEnd = timerval();
 
 }
 

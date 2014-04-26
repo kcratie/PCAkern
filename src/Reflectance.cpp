@@ -54,6 +54,8 @@ Reflectance::ApplyTransform(
 	size_t Count)
 {
 	int status = 0;
+	omp_set_num_threads(mConfig.NumProcs);
+	#pragma omp parallel for schedule(static)
 	for (size_t i = 0; i < Count; i++)
 	{
 		//Refl_(Buf[i], mOutBuf[i]);
@@ -75,20 +77,9 @@ Reflectance::Run()
 	//{
 		size_t count = 0;
 		pixel_t * dataset = mIoAgent->GetDataset(count);
-		//mOutBuf = new pixel_t[count];
-		//omp_set_num_threads(mConfig.NumProcs);
-		//#pragma omp parallel //shared(count, dataset)
-		//{
-			omp_set_num_threads(mConfig.NumProcs);
-			#pragma omp parallel for schedule(static)
-			for(size_t i=0; i<count; i++)
-			{
-				ApplyTransform(dataset, count);
-			}
 
-		//}
-		//delete mOutBuf;
-	//}
+
+		status = ApplyTransform(dataset, count);
 /*	catch(exception &e)
 	{
 		status = -1;

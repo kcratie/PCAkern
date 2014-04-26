@@ -99,7 +99,7 @@ Supervisor::RunFFT()
 								mConfig.NumItrs,
 								FFT, outfile);
 				fft->SetCurrentConfig(cc);
-
+				fft->BuildPlan();	//exclude the plan time as it does not scale. The plan can be reused for different input but of equivalent dimensions.
 				pm->StartTimer();
 				for(size_t itr=0; itr<mConfig.NumItrs; itr++)
 					fft->Run();

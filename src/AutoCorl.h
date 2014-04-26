@@ -30,8 +30,8 @@ private:
 	pixel_t * mOutput;
 
 	int ApplyTransform(
-		pixel_t Buf[],
-		size_t count
+		pixel_t const Buf[],
+		size_t const  Count
 		);
 
 };

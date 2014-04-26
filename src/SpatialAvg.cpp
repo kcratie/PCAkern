@@ -27,7 +27,7 @@ SpatialAvg::~SpatialAvg()
 
 inline void
 SpatialAvg::mask_operation(
-		pixel_t * InAr,
+		pixel_t const * InAr,
 		size_t i,
 		size_t j)
 {
@@ -50,8 +50,8 @@ SpatialAvg::mask_operation(
 
 int
 SpatialAvg::ApplyTransform(
-	pixel_t Buf[],
-	size_t Count)
+	pixel_t const Buf[],
+	size_t const Count)
 {
 	int status = 0;
 	size_t NumRows, NumCols;
@@ -88,7 +88,7 @@ SpatialAvg::Run()
 		pixel_t * dataset = mIoAgent->GetDataset(count);
 		mOutput = mIoAgent->GetOuptBuffer();
 
-		ApplyTransform(dataset, count);
+		status = ApplyTransform(dataset, count);
 /*	}
 	catch(exception &e)
 	{
