@@ -37,9 +37,8 @@ Supervisor::RunRefl()
 	try
 	{
 		string outfile = mConfig.OutputFilename;
-		outfile.append("Refl");
-		size_t stage=1,
-				numstages=(mConfig.MaxNumProcs-mConfig.MinNumProcs+1)*(mConfig.MaxDimPow-mConfig.MinDimPow+1);
+		outfile.append("Refl").append(".csv");
+
 		auto_ptr<IIOAgent> ioa (CreateIOAgent());
 		auto_ptr<Reflectance> refl (CreateReflectance(ioa.get()));
 		auto_ptr<PerfMon> pm (CreatePerfMon());
@@ -63,8 +62,7 @@ Supervisor::RunRefl()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
-				double sz=pow(1<<dpow, 2);
-				cout<<"completed stage " <<stage++ <<" of "<<numstages <<", " <<sz <<" elements in :" << pm->GetDuration()<< " secs\n";
+				//dbgprnt;
 			}
 		}
 		pm->Commit(outfile);
@@ -81,7 +79,7 @@ Supervisor::RunFFT()
 {
 	try{
 		string outfile = mConfig.OutputFilename;
-		outfile.append("FFT2D");
+		outfile.append("FFT2D").append(".csv");
 
 		auto_ptr<IIOAgent> ioa (CreateIOAgent(FFT));
 		auto_ptr<fft2d> fft (Createfft2d(ioa.get()));
@@ -106,7 +104,7 @@ Supervisor::RunFFT()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
-				dbgprnt;
+				//dbgprnt;
 			}
 		}
 		pm->Commit(outfile);
@@ -123,7 +121,7 @@ Supervisor::RunAutoCorl()
 {
 	try{
 		string outfile = mConfig.OutputFilename;
-		outfile.append("AutoCorl");
+		outfile.append("AutoCorl").append(".csv");
 
 		auto_ptr<IIOAgent> ioa (CreateIOAgent());
 		auto_ptr<AutoCorrelation> ac (CreateAutoCorl(ioa.get()));
@@ -148,7 +146,7 @@ Supervisor::RunAutoCorl()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
-				dbgprnt;
+				//dbgprnt;
 			}
 		}
 		pm->Commit(outfile);
@@ -165,7 +163,7 @@ Supervisor::RunSpAvg()
 {
 	try{
 		string outfile = mConfig.OutputFilename;
-		outfile.append("SpAvg");
+		outfile.append("SpAvg").append(".csv");
 
 		auto_ptr<IIOAgent> ioa (CreateIOAgent());
 		auto_ptr<SpatialAvg> SplAvg (CreateSpatialAvg(ioa.get()));
@@ -190,7 +188,7 @@ Supervisor::RunSpAvg()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
-				dbgprnt;
+				//dbgprnt;
 			}
 		}
 		pm->Commit(outfile);
