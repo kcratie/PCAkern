@@ -26,13 +26,14 @@ private:
 	CurrentConfig mConfig;
 
 	static const int MAX_THREADS;
-	static const double A;
-	static const double B;
-	static const double S;
-	static const double L;
-	static const double La;
+	static const pixel_t A;
+	static const pixel_t B;
+	static const pixel_t S;
+	static const pixel_t L;
+	static const pixel_t La;
 
 	IIOAgent * mIoAgent;
+	pixel_t * mOutBuf;
 
 	/*+
 	Reflectance is implemented to be exception safe. It does not validate input as
@@ -47,7 +48,7 @@ private:
 	A and B are coefficients that depend on atmospheric and geometric conditions but are surface-independent.
 	Of these, A, B, S and La are parameters derived from MODTRAN.
 	-*/
-	inline void Refl(double & p)
+	inline void Refl(pixel_t & p)
 	{
 		p = ((L - La - ((B*p) / (1-p*S))) * (1-p*S)) / A;
 	}

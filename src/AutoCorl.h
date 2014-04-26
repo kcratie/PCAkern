@@ -27,7 +27,7 @@ public:
 private:
 	IIOAgent * mIoAgent;
 	CurrentConfig mConfig;
-	pixel_t * mOutAr;
+	pixel_t * mOutput;
 
 	int ApplyTransform(
 		pixel_t Buf[],

@@ -20,23 +20,10 @@ fft2d::fft2d(
 		IIOAgent * IoAgent) :
 		mIoAgent(IoAgent)
 {
-	/*
-	 Create the output array OUT, which is of type FFTW_COMPLEX,
-	 and of a size NX * NYH that is roughly half the dimension of the input data
-	 (ignoring the fact that the input data is real, and the FFT
-	 coefficients are complex).
-	 */
-	size_t NumRows, NumCols;
-	NumRows = NumCols = (1<<mConfig.DimPow);
-	size_t nyh = (NumRows / 2) + 1;
-	mResultSet = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * NumCols * nyh);
-	mReverseSet = new pixel_t[NumRows * NumCols];
 }
 
 fft2d::~fft2d()
 {
-	fftw_free(mResultSet);
-	delete mReverseSet;
 }
 
 
@@ -49,18 +36,7 @@ fft2d::ApplyTransform(
 	int status = 0;
 	size_t NumRows, NumCols;
 	NumRows = NumCols = (1<<mConfig.DimPow);
-
-	/*
-	pixel_t *in;
-	pixel_t *in2;
-	int j;
-	int nx = 500;
-	int ny = 500;
-	int nyh;
-	double begin, end;
-	in = Buf;
-	in2 = mReverseSet;
-	*/
+	mResultSet = mIoAgent->GetFftOuptBuffer();
 
 	fftw_plan plan_backward;
 	fftw_plan plan_forward;
@@ -68,12 +44,7 @@ fft2d::ApplyTransform(
 	plan_forward = fftw_plan_dft_r2c_2d(NumRows, NumCols, Buf, mResultSet, FFTW_MEASURE);
 	fftw_execute(plan_forward);
 
-	// Recreate the input array.
-	plan_backward = fftw_plan_dft_c2r_2d(NumRows, NumCols, mResultSet, mReverseSet, FFTW_ESTIMATE);
-	fftw_execute(plan_backward);
-
 	fftw_destroy_plan(plan_forward);
-	fftw_destroy_plan(plan_backward);
 
 	return status;
 

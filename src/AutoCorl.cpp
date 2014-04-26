@@ -39,10 +39,10 @@ AutoCorrelation::ApplyTransform(
 			{
 				for(size_t j=0;j<N-l;j++)
 				{
-					temp= temp + Buf[(i*N)+j]*Buf[((i+k)*N)+((j+l)*N)];
+					temp= temp + Buf[(i*N)+j]*Buf[((i+k)*N)+(j+l)];
 				}
 			}
-			mOutAr[(k*N)+l]= temp/(x*y);
+			mOutput[(k*N)+l]= temp/(x*y);
 			y--;
 		}
 		x--;
@@ -54,28 +54,20 @@ int
 AutoCorrelation::Run()
 {
 	int status = 0;
-	try
-	{
+/*	try
+	{*/
 		size_t count = 0;
 
 		pixel_t * dataset = mIoAgent->GetDataset(count);
+		mOutput = mIoAgent->GetOuptBuffer();
 
-		//create output buffer since cannot be done in place
-		if(mOutAr) delete mOutAr;
-		mOutAr = new pixel_t[count];
+		status = ApplyTransform(dataset, count);
 
-		for(size_t i = 0; i<mConfig.NumItrs; i++)
-			ApplyTransform(dataset, count);
-
-	}
+/*	}
 	catch(exception &e)
 	{
 		status = -1;
-	}
-
-
-
-
+	}*/
 
 	return status;
 }

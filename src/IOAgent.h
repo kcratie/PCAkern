@@ -11,6 +11,7 @@
 
 #include <cstdlib>
 #include <fstream>
+#include <fftw3.h>
 #include "Configuration.h"
 
 using namespace std;
@@ -24,26 +25,34 @@ public:
 	virtual ~IIOAgent(){}
 	virtual void InitDataset(size_t DimPower)=0;
 	virtual pixel_t * GetDataset(size_t & Count)=0;
+	virtual pixel_t * GetOuptBuffer() = 0;
+	virtual fftw_complex * GetFftOuptBuffer() = 0;
 };
 
 class IOAgent: public virtual IIOAgent {
 public:
-	IOAgent();
+	IOAgent(BenchmarkID_t Benchmark);
 	virtual ~IOAgent();
 
 	void StartProducer();
 	void InitDataset(size_t DimPower);
 	pixel_t * GetDataset(size_t & Count);
+	pixel_t * GetOuptBuffer();
+	fftw_complex * GetFftOuptBuffer();
 
 private:
-	//size_t mNumRows;
-	//size_t mNumCols;
 	size_t mDimPower;
-	pixel_t *mBuf;
+	pixel_t *mReadBuf;
+	pixel_t *mWriteBuf;
+	fftw_complex *mFftWriteBuf;
+	BenchmarkID_t mBenchmark;
+
 	double frand();
+	size_t AllocBuffers();
 };
 
 IIOAgent * CreateIOAgent();
+IIOAgent * CreateIOAgent(BenchmarkID_t Benchmark);
 
 }	//end namespace PCAkern
 

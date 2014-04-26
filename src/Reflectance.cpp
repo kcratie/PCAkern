@@ -20,14 +20,15 @@ namespace PCAkern
 {
 
 //TODO fix dummy values
-const double Reflectance::A = 2.105;
-const double Reflectance::B = 83.23;
-const double Reflectance::S = 64.43;
-const double Reflectance::L = 45.47;
-const double Reflectance::La = 16.95;
+const pixel_t Reflectance::A = 0.105;
+const pixel_t Reflectance::B = 0.23;
+const pixel_t Reflectance::S = 0.43;
+const pixel_t Reflectance::L = 0.47;
+const pixel_t Reflectance::La = 0.95;
 
 const int Reflectance::MAX_THREADS = 4;
 
+#define Refl_(p, q) q = ((45.47 - 16.95 - ((83.23*p) / (1-p*64.43))) * (1-p*64.43)) / 2.105;
 Reflectance::Reflectance(
 		IIOAgent * IoAgent) :
 		mIoAgent(IoAgent)
@@ -49,12 +50,13 @@ Reflectance::~Reflectance(){}
  */
 int
 Reflectance::ApplyTransform(
-	double Buf[],
+	pixel_t Buf[],
 	size_t Count)
 {
 	int status = 0;
 	for (size_t i = 0; i < Count; i++)
 	{
+		//Refl_(Buf[i], mOutBuf[i]);
 		Refl(Buf[i]);
 	}
 	return status;
@@ -69,27 +71,28 @@ int
 Reflectance::Run()
 {
 	int status = 0;
-	try
-	{
+	//try
+	//{
 		size_t count = 0;
 		pixel_t * dataset = mIoAgent->GetDataset(count);
-
-		omp_set_num_threads(mConfig.NumProcs);
-		#pragma omp parallel shared(count, dataset)
-		{
+		//mOutBuf = new pixel_t[count];
+		//omp_set_num_threads(mConfig.NumProcs);
+		//#pragma omp parallel //shared(count, dataset)
+		//{
+			omp_set_num_threads(mConfig.NumProcs);
 			#pragma omp parallel for schedule(static)
 			for(size_t i=0; i<count; i++)
 			{
 				ApplyTransform(dataset, count);
 			}
 
-		}
-
-	}
-	catch(exception &e)
+		//}
+		//delete mOutBuf;
+	//}
+/*	catch(exception &e)
 	{
 		status = -1;
-	}
+	}*/
 	return status;
 }
 

@@ -16,6 +16,14 @@ using namespace std;
 
 namespace PCAkern {
 
+#define dbgprnt																												\
+{																															\
+	static size_t stage=1,																											\
+			numstages=(mConfig.MaxNumProcs-mConfig.MinNumProcs+1)*(mConfig.MaxDimPow-mConfig.MinDimPow+1);					\
+	double sz=pow(1<<dpow, 2);																								\
+	cout<<"completed stage " <<stage++ <<" of "<<numstages <<", " <<sz <<" elements in :" << pm->GetDuration()<< " secs\n";	\
+}
+
 Supervisor::Supervisor(const string & ConfigFile):
 		mConfigFile(ConfigFile)
 {}
@@ -30,7 +38,7 @@ Supervisor::RunRefl()
 	{
 		string outfile = mConfig.OutputFilename;
 		outfile.append("Refl");
-		size_t stage=0,
+		size_t stage=1,
 				numstages=(mConfig.MaxNumProcs-mConfig.MinNumProcs+1)*(mConfig.MaxDimPow-mConfig.MinDimPow+1);
 		auto_ptr<IIOAgent> ioa (CreateIOAgent());
 		auto_ptr<Reflectance> refl (CreateReflectance(ioa.get()));
@@ -75,12 +83,12 @@ Supervisor::RunFFT()
 		string outfile = mConfig.OutputFilename;
 		outfile.append("FFT2D");
 
-		auto_ptr<IIOAgent> ioa (CreateIOAgent());
+		auto_ptr<IIOAgent> ioa (CreateIOAgent(FFT));
 		auto_ptr<fft2d> fft (Createfft2d(ioa.get()));
 		auto_ptr<PerfMon> pm (CreatePerfMon());
 		pm->AddHeader("FFT2D", mConfig.NumItrs);
 
-		for(size_t dpow=mConfig.MinDimPow; dpow<mConfig.MaxDimPow; dpow++)
+		for(size_t dpow=mConfig.MinDimPow; dpow<=mConfig.MaxDimPow; dpow++)
 		{
 			ioa->InitDataset(dpow);
 
@@ -98,6 +106,7 @@ Supervisor::RunFFT()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
+				dbgprnt;
 			}
 		}
 		pm->Commit(outfile);
@@ -121,7 +130,7 @@ Supervisor::RunAutoCorl()
 		auto_ptr<PerfMon> pm (CreatePerfMon());
 		pm->AddHeader("AutoCorl", mConfig.NumItrs);
 
-		for(size_t dpow=mConfig.MinDimPow; dpow<mConfig.MaxDimPow; dpow++)
+		for(size_t dpow=mConfig.MinDimPow; dpow<=mConfig.MaxDimPow; dpow++)
 		{
 			ioa->InitDataset(dpow);
 
@@ -139,6 +148,7 @@ Supervisor::RunAutoCorl()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
+				dbgprnt;
 			}
 		}
 		pm->Commit(outfile);
@@ -162,7 +172,7 @@ Supervisor::RunSpAvg()
 		auto_ptr<PerfMon> pm (CreatePerfMon());
 		pm->AddHeader("SpAvg", mConfig.NumItrs);
 
-		for(size_t dpow=mConfig.MinDimPow; dpow<mConfig.MaxDimPow; dpow++)
+		for(size_t dpow=mConfig.MinDimPow; dpow<=mConfig.MaxDimPow; dpow++)
 		{
 			ioa->InitDataset(dpow);
 
@@ -180,6 +190,7 @@ Supervisor::RunSpAvg()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
+				dbgprnt;
 			}
 		}
 		pm->Commit(outfile);

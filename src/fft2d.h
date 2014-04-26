@@ -32,7 +32,6 @@ private:
 	CurrentConfig mConfig;
 
 	fftw_complex *mResultSet;
-	pixel_t * mReverseSet;
 
 	int ApplyTransform(
 		pixel_t Buf[],

@@ -19,13 +19,11 @@ int mLPFilter[3][3] =  { {1, 2, 1},
 SpatialAvg::SpatialAvg(
 		IIOAgent * IoAgent) :
 		mIoAgent(IoAgent),
-		mOutAr(NULL)
+		mOutput(NULL)
 {}
 
 SpatialAvg::~SpatialAvg()
-{
-	delete mOutAr;
-}
+{}
 
 inline void
 SpatialAvg::mask_operation(
@@ -36,7 +34,7 @@ SpatialAvg::mask_operation(
 
 	const size_t N = 1<<mConfig.DimPow;
 	size_t idx=(i*N+j);
-	mOutAr[i*N+j]=( (InAr[idx]*mLPFilter[1][1]) 		//middle
+	mOutput[i*N+j]=( (InAr[idx]*mLPFilter[1][1]) 		//middle
 				+ (InAr[idx-1]*mLPFilter[1][0]) 		//mid left
 				+ (InAr[idx+1]*mLPFilter[1][2]) 		//mid right
 				+ (InAr[idx-N-1]*mLPFilter[0][0]) 		//upper left
@@ -84,23 +82,18 @@ SpatialAvg::Run()
 {
 
 	int status = 0;
-	try
-	{
+/*	try
+	{*/
 		size_t count = 0;
-
 		pixel_t * dataset = mIoAgent->GetDataset(count);
+		mOutput = mIoAgent->GetOuptBuffer();
 
-		//create output buffer since cannot be done in place
-		if(mOutAr) delete mOutAr;
-		mOutAr = new pixel_t[count];
-
-		for(size_t i = 0; i<mConfig.NumItrs; i++)
-			ApplyTransform(dataset, count);
-	}
+		ApplyTransform(dataset, count);
+/*	}
 	catch(exception &e)
 	{
 		status = -1;
-	}
+	}*/
 	return status;
 }
 
