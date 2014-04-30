@@ -63,7 +63,8 @@ SpatialAvg::ApplyTransform(
 	    }
 	*/
 	omp_set_num_threads(mConfig.NumProcs);
-	#pragma omp parallel for schedule(static)
+	//#pragma omp parallel for schedule(static)
+	#pragma omp parallel for schedule(dynamic, 3)
 	//Performing the operation
 	for(size_t i = 1; i < NumRows-1; i++)
 	{

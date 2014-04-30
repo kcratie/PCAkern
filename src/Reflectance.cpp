@@ -28,7 +28,6 @@ const pixel_t Reflectance::La = 0.95;
 
 const int Reflectance::MAX_THREADS = 4;
 
-#define Refl_(p, q) q = ((45.47 - 16.95 - ((83.23*p) / (1-p*64.43))) * (1-p*64.43)) / 2.105;
 Reflectance::Reflectance(
 		IIOAgent * IoAgent) :
 		mIoAgent(IoAgent)
@@ -55,10 +54,10 @@ Reflectance::ApplyTransform(
 {
 	int status = 0;
 	omp_set_num_threads(mConfig.NumProcs);
-	#pragma omp parallel for schedule(static)
+	//#pragma omp parallel for schedule(static)
+	#pragma omp parallel for schedule(dynamic, 1<<mConfig.DimPow)
 	for (size_t i = 0; i < Count; i++)
 	{
-		//Refl_(Buf[i], mOutBuf[i]);
 		Refl(Buf[i]);
 	}
 	return status;
@@ -106,10 +105,5 @@ Reflectance* CreateReflectance(
 }
 
 } //end namespace PCAkern
-/*
-omp_set_dynamic( 0 );
-omp_set_num_threads( omp_num_procs() );
-int id=omp_get_thread_num();
-num_threads =omp_get_num_threads();
- */
+
 

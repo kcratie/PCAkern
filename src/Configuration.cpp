@@ -31,6 +31,18 @@ CurrentConfig::CurrentConfig():
 			BenchmarkID(All){}
 CurrentConfig::~CurrentConfig(){}
 
+Configuration::Configuration() :
+		MinNumProcs(0),
+		MaxNumProcs(0),
+		MinDimPow(0),
+		MaxDimPow(0),
+		NumItrs(0),
+		BenchmarkID("all"),
+		OutputFilename("./pcaBench"){}
+
+Configuration::~Configuration(){}
+
+
 void
 Configuration::LoadConfig(const string & Filename)
 {
@@ -49,11 +61,7 @@ Configuration::LoadConfig(const string & Filename)
 					MinNumProcs = atoi(val.c_str());
 				else if (key.compare("MaxNumProcs")==0)
 					MaxNumProcs = atoi(val.c_str());
-				/*			  else if (key.compare("MinNumRows")==0)
-				  MinNumRows = atoi(val.c_str());
-			  else if (key.compare("MaxNumRows")==0)
-				  MaxNumRows = atoi(val.c_str());
-				 */			  else if (key.compare("MinDimPow")==0)
+				else if (key.compare("MinDimPow")==0)
 					 MinDimPow = atoi(val.c_str());
 				 else if (key.compare("MaxDimPow")==0)
 					 MaxDimPow = atoi(val.c_str());

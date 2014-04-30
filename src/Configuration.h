@@ -36,6 +36,8 @@ enum BenchmarkID_t
 class Configuration
 {
 public:
+	Configuration();
+	~Configuration();
 	void LoadConfig(const string & Filename);
 	size_t MinNumProcs;
 	size_t MaxNumProcs;

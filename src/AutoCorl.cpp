@@ -24,8 +24,9 @@ AutoCorrelation::ApplyTransform(
 	int status = 0;
 	size_t N = 1<<mConfig.DimPow;
 	pixel_t x=N;
-
+	//size_t chunk = mConfig.DimPow;
 	omp_set_num_threads(mConfig.NumProcs);
+	//#pragma omp parallel for schedule(dynamic, chunk) firstprivate(x)
 	#pragma omp parallel for schedule(static) firstprivate(x)
 	for(size_t k=0;k<N;k++)
 	{

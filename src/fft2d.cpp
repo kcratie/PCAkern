@@ -32,32 +32,6 @@ fft2d::~fft2d()
 	}
 }
 
-
-/*
-int
-fft2d::ApplyTransform(
-	pixel_t Buf[],
-	size_t Count)
-{
-	int status = 0;
-	//size_t NumRows, NumCols;
-	//NumRows = NumCols = (1<<mConfig.DimPow);
-	//mResultSet = mIoAgent->GetFftOuptBuffer();
-
-	//fftw_plan plan_backward;
-	//fftw_plan plan_forward;
-
-	//plan_forward = fftw_plan_dft_r2c_2d(NumRows, NumCols, Buf, mResultSet, FFTW_MEASURE);
-	//double TimerStart = omp_get_wtime();
-	fftw_execute(plan_forward);
-	//double TimerEnd = omp_get_wtime();
-	//cout<<"execute duration:"<< TimerEnd-TimerStart<<"\n";
-	fftw_destroy_plan(plan_forward);
-
-	return status;
-
-}
-*/
 void
 fft2d::BuildPlan()
 {

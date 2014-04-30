@@ -111,7 +111,7 @@ PerfMon::Commit(
 	}
 	WriteHeader();
 	WriteMetrics();
-	WriteSummary("Reflectance");
+	WriteSummary(mPerfHeader.KernelName);
 	mOStr.close();
 }
 

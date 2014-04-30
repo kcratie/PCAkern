@@ -18,8 +18,8 @@ namespace PCAkern {
 
 #define dbgprnt																												\
 {																															\
-	static size_t stage=1,																											\
-			numstages=(mConfig.MaxNumProcs-mConfig.MinNumProcs+1)*(mConfig.MaxDimPow-mConfig.MinDimPow+1);					\
+	static size_t stage=1;																									\
+	size_t numstages=(mConfig.MaxNumProcs-mConfig.MinNumProcs+1)*(mConfig.MaxDimPow-mConfig.MinDimPow+1);					\
 	double sz=pow(1<<dpow, 2);																								\
 	cout<<"completed stage " <<stage++ <<" of "<<numstages <<", " <<sz <<" elements in :" << pm->GetDuration()<< " secs\n";	\
 }
@@ -62,7 +62,7 @@ Supervisor::RunRefl()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
-				//dbgprnt;
+				dbgprnt;
 			}
 		}
 		pm->Commit(outfile);
@@ -146,7 +146,7 @@ Supervisor::RunAutoCorl()
 
 				pm->StopTimer();
 				pm->AddMtericsEntry(cc.NumProcs, 1<<cc.DimPow);
-				//dbgprnt;
+				dbgprnt;
 			}
 		}
 		pm->Commit(outfile);
@@ -252,7 +252,7 @@ Supervisor::RunBenchmark(BenchmarkID_t BenchmarkID)
 	default:
 		RunRefl();
 		RunFFT();
-		RunAutoCorl();
+		//RunAutoCorl();
 		RunSpAvg();
 		break;
 	}
